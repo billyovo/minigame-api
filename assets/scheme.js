@@ -48,7 +48,7 @@ const schemaRecord = {
     }
 }
 
-modules.export = {
+module.exports = {
     schemaCount: schemaCount,
     schemaRecord: schemaRecord
 }
