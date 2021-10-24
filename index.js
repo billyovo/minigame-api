@@ -44,6 +44,11 @@ async function handleReq(req, res, query, parameters = []){
 app.get('/', function(req,res){
     res.status(200).send({status: "OK", uptime: process.uptime(), mode: process.env.NODE_ENV});
 })
+
+app.get('/events', function(req,res){
+  res.status(200).send(JSON.stringify(require("./assets/event.json")))
+})
+
 app.get('/count/:server', schemaCount, function(req,res){
     handleReq(req, res, 'CALL count_server(?, ?, ?)', [req.params.server]);
 })
