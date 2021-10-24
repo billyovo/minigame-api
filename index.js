@@ -1,5 +1,6 @@
 const db = require("./Helper/db");
 const eventHelper = require("./Helper/eventHelper");
+const {schemaCount, schemaRecord} = require("./assets/scheme");
 const app = require('fastify')({
   logger: {
     level: 'error',
@@ -23,55 +24,6 @@ app.addHook('onRequest', (req, res, done) => {
   }
 })
 console.log("Running in: "+process.env.NODE_ENV+" mode");
-const schemaCount = {
-    schema: {
-  		response: {
-    		'200': {
-      			type: 'object',
-     			 properties: {
-        			total: { type: 'integer' },
-        			rows: { 
-           				type: 'array',
-            			items: { 
-                			type: 'object',
-                			properties: {
-                 				name: {type: 'string'},
-                    			uuid: {type: 'string'},
-                    			total: {type: 'integer'}
-                    		}
-            			}
-                   	}
-      			}
-    		}
-  		}
-    }
-}
-
-const schemaRecord = {
-    schema: {
-  		response: {
-    		'200': {
-      			type: 'object',
-     			 properties: {
-        			total: { type: 'integer' },
-        			rows: { 
-           				type: 'array',
-            			items: { 
-                			type: 'object',
-                			properties: {
-                 				name: {type: 'string'},
-                    			uuid: {type: 'string'},
-                                event: {type: 'string'},
-                    			date: {type: 'string'},
-                                server: {type: 'string'}
-                    		}
-            			}
-                   	}
-      			}
-    		}
-  		}
-    }
-}
 
 async function handleReq(req, res, query, totalQuery, parameters = [], totalParameters = []){
     const limit = parseInt(req.query.limit) || 10;
