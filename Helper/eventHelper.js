@@ -1,7 +1,7 @@
 const events = require('../assets/event.json');
 const eventMapping = new Map();
 
-eventMapping.set('all','');
+eventMapping.set('all','all');
 events.forEach((event)=>{
     eventMapping.set(event.id,event.title);
 })
