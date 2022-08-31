@@ -54,7 +54,12 @@ app.get('/news', schemaCount, function(req,res){
 })
 
 app.get('/news/:id', schemaCount, function(req,res){
-  handleReq(req, res, 'CALL get_news(?)', [req.params.id]);
+  console.log(req.params.id);
+  db.query('CALL get_news(?)', [parseInt(req.params.id)])
+  .then((result)=>{
+    if(result[0][0][0])
+    res.status(200).send(JSON.stringify(result[0][0][0]));
+  })
 })
 
 app.get('/count/:server', schemaCount, function(req,res){
