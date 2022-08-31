@@ -3,5 +3,5 @@ CREATE TABLE news (
     title VARCHAR(80) NOT NULL,
     content VARCHAR(5000) NOT NULL,
     publish_date DATE NOT NULL,
-    image VARCHAR(100)
+    image TEXT
 )
