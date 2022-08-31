@@ -34,7 +34,7 @@ async function handleReq(req, res, query, parameters = []){
     const params = [...parameters,limit, offset];
     try{
         const result = await db.query(query,params);   
-        res.status(200).send(JSON.stringify({rows: result[0][0], ...result[0][1][0]}));
+        res.status(result[0][0].length === 0 ? 204 : 200).send(JSON.stringify({rows: result[0][0], ...result[0][1][0]}));
     }
     catch(error){
         app.log.error(error, "Error occured");
@@ -47,6 +47,14 @@ app.get('/', function(req,res){
 
 app.get('/events', function(req,res){
   res.status(200).send(JSON.stringify(require("./assets/event.json")))
+})
+
+app.get('/news', schemaCount, function(req,res){
+  handleReq(req, res, 'CALL get_news_List(?,?)');
+})
+
+app.get('/news/:id', schemaCount, function(req,res){
+  handleReq(req, res, 'CALL get_news(?)', [req.params.id]);
 })
 
 app.get('/count/:server', schemaCount, function(req,res){
