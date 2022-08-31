@@ -19,7 +19,7 @@ app.addHook('onRequest', (req, res, done) => {
   if(req.query.limit && req.query.limit >100){
    	res.status(403).send("Request too large!")
    }
-   if(!(req.params.server === 'survival' || req.params.server === 'skyblock' || req.params.server === 'all')){
+   if(!(req.params.server === 'survival' || req.params.server === 'skyblock' || req.params.server === 'all') && req.params.server){
     res.status(400).send("server does not exist!");
    }
  else{
