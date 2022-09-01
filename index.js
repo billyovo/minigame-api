@@ -60,8 +60,13 @@ app.get('/news/:id', schemaCount, function(req,res){
   }
   db.query('CALL get_news(?)', [parseInt(req.params.id)])
   .then((result)=>{
-    if(result[0][0][0])
-    res.status(200).send(JSON.stringify(result[0][0][0]));
+    if(result[0][0][0]){
+      res.status(200).send(JSON.stringify(result[0][0][0]));
+    }
+    else{
+      res.status(204).send();
+    }
+    
   })
 })
 
