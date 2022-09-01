@@ -34,7 +34,11 @@ async function handleReq(req, res, query, parameters = []){
     const params = [...parameters,limit, offset];
     try{
         const result = await db.query(query,params);   
-        res.status(result[0][0].length === 0 ? 204 : 200).send(JSON.stringify({rows: result[0][0], ...result[0][1][0]}));
+        if(result[0][0].length === 0){
+          res.status(204).send();
+          return;
+        }
+        res.status(200).send(JSON.stringify({rows: result[0][0], ...result[0][1][0]}));
     }
     catch(error){
         app.log.error(error, "Error occured");
