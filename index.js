@@ -54,6 +54,10 @@ app.get('/news', schemaCount, function(req,res){
 })
 
 app.get('/news/:id', schemaCount, function(req,res){
+  if(!parseInt(req.params.id)){
+    res.status(400).send();
+    return;
+  }
   db.query('CALL get_news(?)', [parseInt(req.params.id)])
   .then((result)=>{
     if(result[0][0][0])
