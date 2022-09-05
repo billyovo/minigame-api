@@ -42,3 +42,5 @@ jobs:
       if: always()
       with:
         webhook: ${{ secrets.DISCORD_WEBHOOK }}
+        title: "Deployment testing"
+        description: "Run automated testing"
