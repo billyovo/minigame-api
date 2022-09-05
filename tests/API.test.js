@@ -1,5 +1,8 @@
 import { test, expect, errors } from '@playwright/test';
 let events = require("../assets/event.json")
+events = events.map((event)=>{
+    return event.id;
+})
 events.push("all");
 const servers = ["all","survival","skyblock"];
 const api_url = "https://minigame-api.letsdream.today";
@@ -27,7 +30,7 @@ test('News Content returns', async({ request })=>{
 test('Record return', async ({request})=>{
     for(let i = 0;i<servers.length;i++){
         for(let j = 0;j<events.length;j++){
-            const res = await request.get(`${api_url}/record/all`);
+            const res = await request.get(`${api_url}/record/${servers[i]}/${events[j]}`);
             expect(res.ok);
             expect(await res.json()).toMatchObject({
                 rows: expect.any(Array),
@@ -39,9 +42,9 @@ test('Record return', async ({request})=>{
 })
 
 test('Count returns', async ({request})=>{
-    const res = await request.get(`${api_url}/count/all`);
     for(let i = 0;i<servers.length;i++){
         for(let j = 0;j<events.length;j++){
+            const res = await request.get(`${api_url}/count/${servers[i]}/${events[j]}`);
             expect(res.ok);
             expect(await res.json()).toMatchObject({
                 rows: expect.any(Array),
