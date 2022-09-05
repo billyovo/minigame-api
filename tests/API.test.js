@@ -1,5 +1,7 @@
 import { test, expect, errors } from '@playwright/test';
-
+let events = require("../assets/event.json")
+events.push("all");
+const servers = ["all","survival","skyblock"];
 const api_url = "https://minigame-api.letsdream.today";
 
 test('News List returns', async ({ request }) => {
@@ -23,19 +25,43 @@ test('News Content returns', async({ request })=>{
 })
 
 test('Record return', async ({request})=>{
-    const res = await request.get(`${api_url}/record/all`);
-    expect(res.ok);
-    expect(await res.json()).toMatchObject({
-        rows: expect.any(Array),
-        total: expect.any(Number)
-    })
+    for(let i = 0;i<servers.length;i++){
+        for(let j = 0;j<events.length;j++){
+            const res = await request.get(`${api_url}/record/all`);
+            expect(res.ok);
+            expect(await res.json()).toMatchObject({
+                rows: expect.any(Array),
+                total: expect.any(Number)
+            })
+        }
+    }
+    
 })
 
 test('Count returns', async ({request})=>{
     const res = await request.get(`${api_url}/count/all`);
-    expect(res.ok);
-    expect(await res.json()).toMatchObject({
-        rows: expect.any(Array),
-        total: expect.any(Number)
-    })
+    for(let i = 0;i<servers.length;i++){
+        for(let j = 0;j<events.length;j++){
+            expect(res.ok);
+            expect(await res.json()).toMatchObject({
+                rows: expect.any(Array),
+                total: expect.any(Number)
+            })
+        }
+    }
+})
+
+test('Rejects invalid server', async ({request})=>{
+    const res = await request.get(`${api_url}/count/abcdefg`);
+    expect(!res.ok);
+})
+
+test('Rejects invalid event', async ({request})=>{
+    const res = await request.get(`${api_url}/count/all/abcdefg`);
+    expect(!res.ok);
+})
+
+test('Rejects big records', async ({request})=>{
+    const res = await request.get(`${api_url}/count/all?limit=1000`);
+    expect(!res.ok);
 })
