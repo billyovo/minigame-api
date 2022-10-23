@@ -58,11 +58,11 @@ app.get('/events', function(req,res){
   res.status(200).send(JSON.stringify(require("./assets/event.json")))
 })
 
-app.get('/news', schemaCount, function(req,res){
+app.get('/news', function(req,res){
   handleReq(req, res, 'CALL get_news_List(?,?)');
 })
 
-app.get('/news/:id', schemaCount, function(req,res){
+app.get('/news/:id', function(req,res){
   if(!parseInt(req.params.id)){
     res.status(400).send();
     return;
