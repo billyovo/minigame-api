@@ -105,3 +105,4 @@ dist
 
 config.json
 error-log.txt
+access-log.txt

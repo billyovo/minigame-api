@@ -1,35 +1,65 @@
 const db = require("./Helper/db");
 const eventHelper = require("./Helper/eventHelper");
-const {schemaCount, schemaRecord} = require("./assets/scheme");
-const app = require('fastify')({
-  logger: {
-    level: 'error',
-    file: './error-log.txt'
+require('dotenv').config();
+
+const { request } = require('undici');
+const jwt = require('jsonwebtoken');
+
+const express = require('express');
+const app = express();
+
+app.use(express.json());
+
+const rateLimit = require('express-rate-limit');
+const limiter = rateLimit({
+	windowMs: 15 * 60 * 1000, 
+	max: 450, 
+	standardHeaders: true, 
+	legacyHeaders: false, 
+})
+app.use(limiter)
+
+const cors = require('cors')
+app.use(cors());
+
+const helmet = require("helmet");
+app.use(helmet());
+
+
+const morgan = require('morgan')
+const fs = require('fs')
+const errorLogStream = fs.createWriteStream('./error-log.txt', { flags: 'a' });
+app.use(morgan('combined', { 
+  stream: errorLogStream, 
+  skip: function (req, res) { 
+    return res.statusCode < 400 
   }
-});
-app.register(require('fastify-rate-limit'), {
-  max: 900,
-  timeWindow: '30 minute'
-});
-app.register(require('fastify-cors'));
-app.register(require('fastify-helmet'));
+}))
+const accessLogStream = fs.createWriteStream('./access-log.txt', { flags: 'a' });
+app.use(morgan('combined', { 
+  stream: accessLogStream, 
+  skip: function (req, res) { 
+    return req.method === 'GET';
+  }
+}))
 
 
-app.addHook('onRequest', (req, res, done) => {
+app.all('*', (req, res, done) => {
   if(req.query.limit && req.query.limit >100){
    	res.status(403).send("Request too large!")
+    return;
    }
 
    if(!(req.params.server === 'survival' || req.params.server === 'skyblock' || req.params.server === 'all') && req.params.server){
     res.status(400).send("server does not exist!");
+    return;
    }
 
    if(req.params.event && !eventHelper.findEventID(req.params.event)){
     res.status(400).send("Event does not exist!")
+    return;
   }
- else{
  	done();
-  }
 })
 console.log("Running in: "+process.env.NODE_ENV+" mode");
 
@@ -46,8 +76,8 @@ async function handleReq(req, res, query, parameters = []){
         res.status(200).send(JSON.stringify({rows: result[0][0], ...result[0][1][0]}));
     }
     catch(error){
-        app.log.error(error, "Error occured");
-        res.code(500).send();
+        console.log(error);
+        res.status(500).send();
     }
 }
 app.get('/', function(req,res){
@@ -58,11 +88,11 @@ app.get('/events', function(req,res){
   res.status(200).send(JSON.stringify(require("./assets/event.json")))
 })
 
-app.get('/news', schemaCount, function(req,res){
+app.get('/news', function(req,res){
   handleReq(req, res, 'CALL get_news_List(?,?)');
 })
 
-app.get('/news/:id', schemaCount, function(req,res){
+app.get('/news/:id',function(req,res){
   if(!parseInt(req.params.id)){
     res.status(400).send();
     return;
@@ -79,40 +109,127 @@ app.get('/news/:id', schemaCount, function(req,res){
   })
 })
 
-app.get('/count/:server', schemaCount, function(req,res){
+app.get('/count/:server', function(req,res){
     handleReq(req, res, 'CALL count_server(?, ?, ?)', [req.params.server]);
 })
 
-app.get('/count/:server/:event', schemaCount, function(req,res){
+app.get('/count/:server/:event', function(req,res){
     const event = eventHelper.findEventID(req.params.event);
     handleReq(req, res, 'CALL count_event(?,?,?,?)', [req.params.server, event]);
 })
 
-app.get('/count/:server/:event/:name', schemaCount, function(req,res){
+app.get('/count/:server/:event/:name', function(req,res){
     const event = eventHelper.findEventID(req.params.event);
     handleReq(req, res, 'CALL count_name(?,?,?,?,?)', [req.params.server, event, req.params.name]);
 })
 
-app.get('/record/:server', schemaRecord, function(req,res){
+app.get('/record/:server', function(req,res){
     handleReq(req, res, 'CALL record_server(?, ?, ?)', [req.params.server]);
 })
 
 
-app.get('/record/:server/:event', schemaRecord, function(req,res){
+app.get('/record/:server/:event', function(req,res){
     const event = eventHelper.findEventID(req.params.event);
     handleReq(req, res, 'CALL record_event(?, ?, ?, ?)', [req.params.server, event]);
 })
 
-app.get('/record/:server/:event/:name', schemaRecord, function(req,res){   
+app.get('/record/:server/:event/:name', function(req,res){   
     const event = eventHelper.findEventID(req.params.event);
     handleReq(req, res, 'CALL record_name(?, ?, ?, ?, ?)', [req.params.server, event, req.params.name]);
 })
 
-app.listen(28001, '0.0.0.0', function (error, address) {
-  if (error) {
-    console.error(error);
-    process.exit(1)
+app.post('/auth', async function(req,res){
+  const code = req.body?.code;
+
+  const tokenResponseData = await request('https://discord.com/api/oauth2/token', {
+				method: 'POST',
+        body: new URLSearchParams({
+					client_id: process.env.CLIENT_ID,
+					client_secret: process.env.CLIENT_SECRET,
+					code: code,
+					grant_type: 'authorization_code',
+					redirect_uri: process.env.REDIRECT_URI,
+					scope: 'identify',
+				}).toString(),
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+			});
+  const response = await tokenResponseData.body.json();
+  if(!response?.access_token){
+    res.status(401).send();
+    return;
   }
-  console.log(`Server working on ${address}`);
+
+  const accountInfo = await request(process.env.INFO_URL,{
+    method: 'GET',
+    headers: {
+      'Authorization': `${response?.token_type} ${response?.access_token}`
+    }
+  })
+  const info = await accountInfo.body.json();
+  if(!info?.roles){
+    res.status(401).send();
+    return;
+  }
+  const {editable_roles} = require("./config.json");
+  const common_roles = editable_roles.filter(value => info.roles.includes(value));
+  if(common_roles.length === 0){
+    res.status(401).send();
+    return;
+  }
+  else{
+    res.status(200).send(JSON.stringify({
+      token: jwt.sign({
+        exp: Math.floor(Date.now() / 1000) + (60 * 60),
+      }, process.env.SECRET),
+      avatarurl: `https://cdn.discordapp.com/avatars/${info.user.id}/${info.user.avatar}`,
+      name: info.user.username+"#"+info.user.discriminator
+    }))
+  }
+  
+})
+
+const authMiddleware = (req, res, next) => {
+  if(jwt.verify(req.headers?.authorization?.split(" ")[1], process.env.SECRET)){
+    next();
+    return;
+  }
+  else{
+    res.status(401).send();
+  }
+  
+}
+app.delete('/news/edit/:id', authMiddleware, async function(req,res){
+  try{
+    await db.query('CALL delete_news(?)',[req.params.id]);
+    res.status(200).send();
+  }
+  catch(error){
+    res.status(500).send(error.message);
+  }
+})
+
+app.post('/news/edit/new', authMiddleware, async function(req,res){
+  try{
+    await db.query('CALL create_news(?,?,?,?)',[req.body.title, req.body.content, req.body.publish_date, req.body.image]);
+    res.status(200).send();
+  }
+  catch(error){
+    res.status(500).send(error.message);
+  }
+})
+
+app.patch('/news/edit/:id', authMiddleware, async function(req,res){
+  try{
+    await db.query('CALL update_news(?,?,?,?,?)',[req.body.title, req.body.content, req.body.publish_date, req.body.image, req.params.id]);
+    res.status(200).send();
+  }
+  catch(error){
+    res.status(500).send(error.message);
+  }
+})
+
+app.listen(28001, '0.0.0.0',()=> {
   console.log("done!");
 })
