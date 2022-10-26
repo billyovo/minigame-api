@@ -196,14 +196,15 @@ app.post('/auth', async function(req,res){
 })
 
 const authMiddleware = (req, res, next) => {
-  if(jwt.verify(req.headers?.authorization?.split(" ")[1], process.env.SECRET)){
+  try{
+    const decoded = jwt.verify(req.headers?.authorization?.split(" ")[1], process.env.SECRET);
+    if(!decoded) throw new Error();
     next();
-    return;
   }
-  else{
+  catch(error){
     res.status(401).send();
   }
-  
+
 }
 app.delete('/news/edit/:id', authMiddleware, async function(req,res){
   try{
