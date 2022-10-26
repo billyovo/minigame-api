@@ -36,7 +36,7 @@ app.set('trust proxy', 'loopback,uniquelocal');
 app.use(morgan('tiny', { 
   stream: errorLogStream, 
   skip: function (req, res) { 
-    return res.statusCode < 400 && req.method !== 'GET';
+    return (res.statusCode < 400) || (req.method !== 'GET');
   }
 }))
 
