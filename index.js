@@ -162,7 +162,7 @@ app.post('/auth', async function(req,res){
 			});
   const response = await tokenResponseData.body.json();
   if(!response?.access_token){
-    res.status(401).send();
+    res.status(401).send("Wrong code received!");
     return;
   }
 
@@ -174,13 +174,13 @@ app.post('/auth', async function(req,res){
   })
   const info = await accountInfo.body.json();
   if(!info?.roles){
-    res.status(401).send();
+    res.status(401).send('Wrong token received!');
     return;
   }
   const {editable_roles} = require("./config.json");
   const common_roles = editable_roles.filter(value => info.roles.includes(value));
   if(common_roles.length === 0){
-    res.status(401).send();
+    res.status(401).send("No acceptable role!");
     return;
   }
   else{
@@ -202,7 +202,7 @@ const authMiddleware = (req, res, next) => {
     next();
   }
   catch(error){
-    res.status(401).send();
+    res.status(401).send("Token is wrong or expired!");
   }
 
 }
