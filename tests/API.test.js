@@ -5,7 +5,7 @@ events = events.map((event)=>{
 })
 events.push("all");
 const servers = ["all","survival","skyblock"];
-const api_url = "http://localhost:28001";
+const api_url = "https://minigame-api.letsdream.today";
 
 test('News List returns', async ({ request }) => {
     const res = await request.get(`${api_url}/news?limit=3`);

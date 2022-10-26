@@ -29,12 +29,17 @@ app.use(helmet());
 const morgan = require('morgan')
 const fs = require('fs')
 const errorLogStream = fs.createWriteStream('./error-log.txt', { flags: 'a' });
-app.use(morgan('combined', { 
+morgan.token('remote-addr', function (req) {
+  return req.headers['x-real-ip'] || req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+});
+app.set('trust proxy', 'loopback,uniquelocal');
+app.use(morgan('tiny', { 
   stream: errorLogStream, 
   skip: function (req, res) { 
-    return res.statusCode < 400 
+    return res.statusCode < 400 && req.method !== 'GET';
   }
 }))
+
 const accessLogStream = fs.createWriteStream('./access-log.txt', { flags: 'a' });
 app.use(morgan('combined', { 
   stream: accessLogStream, 
