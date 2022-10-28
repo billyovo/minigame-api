@@ -30,17 +30,10 @@ jobs:
       with:
         args: 'I am restarting minigame API!'
         
-    - name: Use Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: latest
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run test
     
     - uses: sarisia/actions-status-discord@v1
       if: always()
       with:
         webhook: ${{ secrets.DISCORD_WEBHOOK }}
         title: "Deployment testing"
-        description: "Run automated testing"
+        description: "Deploy"
