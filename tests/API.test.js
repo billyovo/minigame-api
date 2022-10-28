@@ -68,3 +68,19 @@ test('Rejects big records', async ({request})=>{
     const res = await request.get(`${api_url}/count/all?limit=1000`);
     expect(!res.ok);
 })
+
+test('Rejects unauthorized access (delete)', async ({request})=>{
+    const res = await request.delete(`${api_url}/news/edit/1`);
+    expect(!res.ok);
+})
+
+test('Rejects unauthorized access (post)', async ({request})=>{
+    const res = await request.post(`${api_url}/news/edit/new`);
+    expect(!res.ok);
+})
+
+
+test('Rejects unauthorized access (patch)', async ({request})=>{
+    const res = await request.patch(`${api_url}/news/edit/1`);
+    expect(!res.ok);
+})
