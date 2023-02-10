@@ -1,0 +1,12 @@
+
+{
+  "name": "test mongodb",
+  "version": "1.0.0",
+  "author": "jeff",
+  "dependencies": {
+    "mongodb": "^5.0.0",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2"
+  },
+  "type": "module"
+}
