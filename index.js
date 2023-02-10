@@ -4,7 +4,7 @@ import express from "express";
 const app = express();
 app.use(express.json());
 
-const rateLimit = require('express-rate-limit');
+import rateLimit from 'express-rate-limit';
 const limiter = rateLimit({
 	windowMs: 15 * 60 * 1000, 
 	max: 450, 
@@ -13,10 +13,10 @@ const limiter = rateLimit({
 })
 app.use(limiter)
 
-const cors = require('cors')
+import cors from 'cors';
 app.use(cors());
 
-const helmet = require("helmet");
+import helmet from "helmet";
 app.use(helmet());
 
 app.all('*', validateRequest);
