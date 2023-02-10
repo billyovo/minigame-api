@@ -13,6 +13,6 @@ app.get('/count/:server', createFilter, getCountPipelineResult);
 app.get('/count/:server/:event', createFilter, getCountPipelineResult);
 app.get('/count/:server/:event/:player', createFilter, getCountPipelineResult);
 
-app.listen(25687, '0.0.0.0',()=> {
+app.listen(28001, '0.0.0.0',()=> {
   console.log("done!");
 })
