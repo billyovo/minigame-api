@@ -2,6 +2,22 @@ import {validateRequest, createRecordFilter, createFilter} from "./middleware/mi
 import {getRecordPipelineResult, getCountPipelineResult} from "./controller/controllers.js";
 import express from "express";
 const app = express();
+app.use(express.json());
+
+const rateLimit = require('express-rate-limit');
+const limiter = rateLimit({
+	windowMs: 15 * 60 * 1000, 
+	max: 450, 
+	standardHeaders: true, 
+	legacyHeaders: false, 
+})
+app.use(limiter)
+
+const cors = require('cors')
+app.use(cors());
+
+const helmet = require("helmet");
+app.use(helmet());
 
 app.all('*', validateRequest);
 
