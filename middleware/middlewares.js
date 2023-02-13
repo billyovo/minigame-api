@@ -59,8 +59,16 @@ export function createNewsListFilter(req,res,next){
             "$lt": req.params._id
         }
     }
-    res.locals.filter = filters;
+    res.locals.filters = filters;
     res.locals.limit = parseInt(req.query.limit) || 20;
+    next();   
+}
+
+export function createNewsFilter(req, res, next){
+    let filters = {
+        "_id": new ObjectId(req.query._id)
+    }
+
+    res.locals.filters = filters;
     next();
-    
 }
