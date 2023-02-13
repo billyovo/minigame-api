@@ -47,3 +47,20 @@ export function createFilter(req, res, next){
     res.locals.offset = (parseInt(req.query.page)*res.locals.limit) || 0;
     next();
 }
+
+export function createNewsListFilter(req,res,next){
+    let filters = {
+        "publish_date":{
+            "$lte": new Date().toLocaleDateString('en-CA'),
+        }
+    };
+    if(req.params._id){
+        filters._id = {
+            "$lt": req.params._id
+        }
+    }
+    res.locals.filter = filters;
+    res.locals.limit = parseInt(req.query.limit) || 20;
+    next();
+    
+}

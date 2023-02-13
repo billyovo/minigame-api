@@ -1,4 +1,4 @@
-import {winner} from "../utils/database.js";
+import {winner, news} from "../utils/database.js";
 
 function createCountPipeline(filters, limit, offset, before){
     return [
@@ -20,7 +20,7 @@ function createCountPipeline(filters, limit, offset, before){
     }
   }, {
     '$facet': {
-      'count': [
+      'total': [
         {
           '$count': 'count'
         }
@@ -43,7 +43,7 @@ function createCountPipeline(filters, limit, offset, before){
     }
   }, {
     '$addFields': {
-      'count': {
+      'total': {
         '$arrayElemAt': [
           '$count.count', 0
         ]
@@ -52,7 +52,7 @@ function createCountPipeline(filters, limit, offset, before){
   }
 ]
 }
-function createRecordPipeline(filters, limit, before){
+function createRecordPipeline(filters, limit){
     return [
    {
     '$sort': {
@@ -65,7 +65,7 @@ function createRecordPipeline(filters, limit, before){
   },
   {
     '$facet': {
-      'count': [
+      'total': [
         {
           '$count': 'count'
         }
@@ -90,7 +90,16 @@ function createRecordPipeline(filters, limit, before){
     '$unset': 'count'
   }
 ]};
-    
+
+function createNewsListPipeline(filters, limit){
+  return[
+    {
+      '$match': filters
+    }, {
+      '$limit': limit
+    }
+  ]
+}
 export async function getRecordPipelineResult(req, res){
     const pipeline = createRecordPipeline(res.locals.filters, res.locals.limit);
     const data = await winner.aggregate(pipeline).toArray();
@@ -100,4 +109,15 @@ export async function getCountPipelineResult(req, res){
     const pipeline = createCountPipeline(res.locals.filters, res.locals.limit, res.locals.offset);
     const data = await winner.aggregate(pipeline).toArray();
     res.send(data[0]);
+}
+
+export async function getNewsList(req, res){
+  const pipeline = createNewsListPipeline(res.locals.filters, res.locals.limit);
+    const data = await news.aggregate(pipeline).toArray();
+    res.send(data[0]);
+}
+
+export async function getNews(req, res){
+  const data = await news.findOne({_id: req.params._id});
+  res.send(data[0]);
 }

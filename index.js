@@ -1,5 +1,5 @@
-import {validateRequest, createRecordFilter, createFilter} from "./middleware/middlewares.js";
-import {getRecordPipelineResult, getCountPipelineResult} from "./controller/controllers.js";
+import {validateRequest, createRecordFilter, createFilter, createNewsListFilter} from "./middleware/middlewares.js";
+import {getRecordPipelineResult, getCountPipelineResult, getNewsList, getNews} from "./controller/controllers.js";
 import express from "express";
 const app = express();
 app.use(express.json());
@@ -28,6 +28,9 @@ app.get('/record/:server/:event/:player', createRecordFilter, getRecordPipelineR
 app.get('/count/:server', createFilter, getCountPipelineResult);
 app.get('/count/:server/:event', createFilter, getCountPipelineResult);
 app.get('/count/:server/:event/:player', createFilter, getCountPipelineResult);
+
+app.get('/news', createNewsListFilter, getNewsList);
+app.get('/news/:id', getNews)
 
 app.listen(28001, '0.0.0.0',()=> {
   console.log("done!");
