@@ -54,11 +54,12 @@ export function createNewsListFilter(req,res,next){
             "$lte": new Date().toLocaleDateString('en-CA'),
         }
     };
-    if(req.params._id){
+    if(req.query._id){
         filters._id = {
-            "$lt": req.params._id
+            "$lt": new ObjectId(req.query._id)
         }
     }
+    
     res.locals.filters = filters;
     res.locals.limit = parseInt(req.query.limit) || 20;
     next();   
@@ -66,7 +67,7 @@ export function createNewsListFilter(req,res,next){
 
 export function createNewsFilter(req, res, next){
     let filters = {
-        "_id": new ObjectId(req.query._id)
+        "_id": new ObjectId(req.params._id)
     }
 
     res.locals.filters = filters;

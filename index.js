@@ -30,7 +30,7 @@ app.get('/count/:server/:event', createFilter, getCountPipelineResult);
 app.get('/count/:server/:event/:player', createFilter, getCountPipelineResult);
 
 app.get('/news', createNewsListFilter, getNewsList);
-app.get('/news/:id', createNewsFilter, getNews);
+app.get('/news/:_id', createNewsFilter, getNews);
 
 app.listen(28001, '0.0.0.0',()=> {
   console.log("done!");

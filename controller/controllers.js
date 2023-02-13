@@ -1,6 +1,6 @@
 import {winner, news} from "../utils/database.js";
 
-function createCountPipeline(filters, limit, offset, before){
+function createCountPipeline(filters, limit, offset){
     return [
   {
     '$match': filters
@@ -30,7 +30,7 @@ function createCountPipeline(filters, limit, offset, before){
               '$skip': offset
           },
         {
-          '$limit': 10
+          '$limit': limit
         }, {
           '$project': {
             '_id': 0, 
@@ -92,11 +92,30 @@ function createRecordPipeline(filters, limit){
 ]};
 
 function createNewsListPipeline(filters, limit){
-  return[
+  return [
     {
       '$match': filters
     }, {
-      '$limit': limit
+      '$facet': {
+        'total': [
+          {
+            '$count': 'count'
+          }
+        ], 
+        'rows': [
+          {
+            '$limit': limit
+          }
+        ]
+      }
+    }, {
+      '$addFields': {
+        'total': {
+          '$arrayElemAt': [
+            '$total.count', 0
+          ]
+        }
+      }
     }
   ]
 }
@@ -113,8 +132,8 @@ export async function getCountPipelineResult(req, res){
 
 export async function getNewsList(req, res){
   const pipeline = createNewsListPipeline(res.locals.filters, res.locals.limit);
-    const data = await news.aggregate(pipeline).toArray();
-    res.send(data[0]);
+  const data = await news.aggregate(pipeline).toArray();
+  res.send(data[0]);
 }
 
 export async function getNews(req, res){
