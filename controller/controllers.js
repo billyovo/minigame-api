@@ -45,7 +45,7 @@ function createCountPipeline(filters, limit, offset){
     '$addFields': {
       'total': {
         '$arrayElemAt': [
-          '$count.count', 0
+          '$total.count', 0
         ]
       }
     }
@@ -82,7 +82,7 @@ function createRecordPipeline(filters, limit){
     '$addFields': {
       'total': {
         '$arrayElemAt': [
-          '$count.count', 0
+          '$total.count', 0
         ]
       }
     }

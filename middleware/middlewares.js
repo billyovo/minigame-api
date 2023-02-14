@@ -16,13 +16,13 @@ export function validateRequest(req, res, done){
 export function createRecordFilter(req, res, next){
 	let filters = {};
     if(req.query.before){
-        filters.before = {
+        filters._id = {
             "$lt": new ObjectId(req.query.before)
         }
     }
     if(req.query.after){
-        filters.after = {
-            "gt": new ObjectId(req.query.after)
+        filters._id = {
+            "$gt": new ObjectId(req.query.after)
         }
     }
     const serverName = getServerName(req.params.server);
@@ -62,13 +62,13 @@ export function createNewsListFilter(req,res,next){
         }
     };
     if(req.query.before){
-        filters.before = {
+        filters._id = {
             "$lt": new ObjectId(req.query.before)
         }
     }
     if(req.query.after){
-        filters.after = {
-            "gt": new ObjectId(req.query.after)
+        filters._id = {
+            "$gt": new ObjectId(req.query.after)
         }
     }
     
