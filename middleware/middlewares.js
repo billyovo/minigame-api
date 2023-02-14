@@ -15,9 +15,16 @@ export function validateRequest(req, res, done){
 
 export function createRecordFilter(req, res, next){
 	let filters = {};
-    if(req.query._id){
-        filters._id =  req.query.prev ? {"$gt": new ObjectId(req.query._id)} : {"$lt": new ObjectId(req.query._id)};
-    } 
+    if(req.query.before){
+        filters.before = {
+            "$lt": new ObjectId(req.query.before)
+        }
+    }
+    if(req.query.after){
+        filters.after = {
+            "gt": new ObjectId(req.query.after)
+        }
+    }
     const serverName = getServerName(req.params.server);
     if(serverName !== "all") filters.server = serverName;
     
@@ -54,9 +61,14 @@ export function createNewsListFilter(req,res,next){
             "$lte": new Date().toLocaleDateString('en-CA'),
         }
     };
-    if(req.query._id){
-        filters._id = {
-            "$lt": new ObjectId(req.query._id)
+    if(req.query.before){
+        filters.before = {
+            "$lt": new ObjectId(req.query.before)
+        }
+    }
+    if(req.query.after){
+        filters.after = {
+            "gt": new ObjectId(req.query.after)
         }
     }
     
