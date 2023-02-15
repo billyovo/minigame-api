@@ -34,7 +34,7 @@ export function createRecordFilter(req, res, next){
     if(req.params.player) filters.name = req.params.player;
     
     res.locals.filters = filters;
-    res.locals.limit = parseInt(req.query.limit) || 10;
+    res.locals.limit = parseInt(req.query.limit) || 50;
     next();
 }
 
@@ -50,7 +50,7 @@ export function createFilter(req, res, next){
     if(req.query.before) filters.date = {"$lte": req.query.before};
     
     res.locals.filters = filters;
-    res.locals.limit = parseInt(req.query.limit) || 10;
+    res.locals.limit = parseInt(req.query.limit) || 50;
     res.locals.offset = (parseInt(req.query.page)*res.locals.limit) || 0;
     next();
 }
@@ -73,7 +73,7 @@ export function createNewsListFilter(req,res,next){
     }
     
     res.locals.filters = filters;
-    res.locals.limit = parseInt(req.query.limit) || 20;
+    res.locals.limit = parseInt(req.query.limit) || 50;
     next();   
 }
 
