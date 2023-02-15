@@ -30,7 +30,7 @@ export function createRecordFilter(req, res, next){
     
     const eventName = getEventName(req.params.event);
     if(eventName) filters.event = eventName;
-    if(req.query.before) filters.date = {"$lte": req.query.before};
+    if(req.query.dateBefore) filters.date = {"$lte": req.query.dateBefore};
     if(req.params.player) filters.name = req.params.player;
     
     res.locals.filters = filters;
@@ -47,7 +47,7 @@ export function createFilter(req, res, next){
     if(eventName) filters.event = eventName;
     
     if(req.params.player) filters.name = req.params.player;
-    if(req.query.before) filters.date = {"$lte": req.query.before};
+    if(req.query.dateBefore) filters.date = {"$lte": req.query.dateBefore};
     
     res.locals.filters = filters;
     res.locals.limit = parseInt(req.query.limit) || 50;
