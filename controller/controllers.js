@@ -56,7 +56,6 @@ function createRecordPipeline(filters, limit){
     return [
    {
     '$sort': {
-      'date': -1, 
       '_id': -1
     }
   },
