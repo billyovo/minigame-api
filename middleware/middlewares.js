@@ -58,7 +58,7 @@ export function createFilter(req, res, next){
 export function createNewsListFilter(req,res,next){
     let filters = {
         "publish_date":{
-            "$lte": new Date().toLocaleDateString('en-CA'),
+            "$lte": new Date().toISOString().substring(0,10),
         }
     };
     if(req.query.before){
