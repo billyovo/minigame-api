@@ -13,7 +13,7 @@
     "jsonwebtoken": "^9.0.0",
     "morgan": "^1.10.0",
     "mysql2": "^2.3.0",
-    "undici": "^5.11.0"
+    "undici": "^5.19.1"
   },
   "scripts": {
     "test": "npx playwright test"
