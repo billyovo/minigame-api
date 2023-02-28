@@ -1,14 +1,16 @@
 {
-  "name": "test mongodb",
+  "name": "Minigame Record & News API",
   "version": "1.0.0",
-  "author": "jeff",
+  "author": "deadfish12",
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "express-rate-limit": "^6.7.0",
     "helmet": "^6.0.1",
-    "mongodb": "^5.0.0"
+    "mongodb": "^5.0.0",
+    "swagger-autogen": "^2.23.1",
+    "swagger-ui-express": "^4.6.2"
   },
   "type": "module"
 }

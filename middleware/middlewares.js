@@ -1,6 +1,14 @@
 import {getEventName, getServerName} from "../utils/namingUtils.js";
 import {ObjectId} from "mongodb";
 
+/*
+    validate if request is valid
+    1. less than 100 records
+    2. more than 0 records
+
+    @typedef {object} showRequestQuery
+    @property {number} limit - number of records to show
+*/
 export function validateRequest(req, res, done){
   if(req.query.limit && req.query.limit >100){
    	res.status(403).send("Request too large!")
@@ -12,7 +20,29 @@ export function validateRequest(req, res, done){
   }
     done();
 }
+/*
+    handle request for /record
+    @typedef {object} recordRequestQuery
+    @property {string} before - get records before this id
+    @property {string} after - get records after this id
+    @property {string} dateBefore - get records before this date
+    @property {number} limit - number of records to show
 
+    @typedef {object} recordRequestParams
+    @property {string} server - get records from this server
+    @property {string} event - get records from this event
+    @property {string} player - get records from this player
+
+    @typedef {object} recordResponse
+    @property {number} total - total number of records
+    @property {object[]} rows - array of records
+    @property {string} rows._id - id of record
+    @property {string} rows.server - server of record
+    @property {string} rows.event - event of record
+    @property {string} rows.name - name of record
+    @property {string} rows.UUID - UUID of record
+    @property {string} rows.date - date of record
+*/
 export function createRecordFilter(req, res, next){
 	let filters = {};
     if(req.query.before){
@@ -38,6 +68,25 @@ export function createRecordFilter(req, res, next){
     next();
 }
 
+/*
+    handle request for /count
+    @typedef {object} countRequestQuery
+    @property {string} dateBefore - get records before this date
+    @property {number} limit - number of records to show
+    @property {number} page - page number
+
+    @typedef {object} countRequestParams
+    @property {string} server - get records from this server
+    @property {string} event - get records from this event
+    @property {string} player - get records from this player
+
+    @typedef {object} countResponse
+    @property {number} total - total number of records
+    @property {object[]} rows - array of records
+    @property {string} rows.name - name of record
+    @property {string} rows.UUID - UUID of record
+    @property {number} rows.total - total number of records
+*/
 export function createFilter(req, res, next){
 	let filters = {};
     const serverName = getServerName(req.params.server);
@@ -54,6 +103,27 @@ export function createFilter(req, res, next){
     res.locals.offset = (parseInt(req.query.page)*res.locals.limit) || 0;
     next();
 }
+
+/*
+    handle request for /news
+    @typedef {object} newsRequestQuery
+    @property {string} before - get records before this id
+    @property {string} after - get records after this id
+    @property {number} limit - number of records to show
+
+    @typedef {object} newsRequestParams
+    @property {string} _id - get records from this id
+
+    @typedef {object} newsResponse
+    @property {number} total - total number of news
+    @property {object[]} rows - array of news
+    @property {string} rows._id - id of news
+    @property {string} rows.title - title of news
+    @property {string} rows.content - content of news
+    @property {string} rows.publish_date - publish date of news
+    @property {string[]} rows.image - image of the news
+
+*/
 
 export function createNewsListFilter(req,res,next){
     let filters = {
@@ -77,6 +147,21 @@ export function createNewsListFilter(req,res,next){
     next();   
 }
 
+/*
+    handle request for /news/:_id
+    @typedef {object} newsRequestParams
+    @property {string} _id - get records from this id
+
+    @typedef {object} newsResponse
+    @property {number} total - total number of news
+    @property {object[]} rows - array of news
+    @property {string} rows._id - id of news
+    @property {string} rows.title - title of news
+    @property {string} rows.content - content of news
+    @property {string} rows.publish_date - publish date of news
+    @property {string[]} rows.image - image of the news
+    
+*/
 export function createNewsFilter(req, res, next){
     let filters = {
         "_id": new ObjectId(req.params._id)
