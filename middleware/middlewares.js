@@ -1,5 +1,6 @@
 import {getEventName, getServerName} from "../utils/namingUtils.js";
 import {ObjectId} from "mongodb";
+import jwt from 'jsonwebtoken';
 
 /*
     validate if request is valid
@@ -169,4 +170,17 @@ export function createNewsFilter(req, res, next){
 
     res.locals.filters = filters;
     next();
+}
+
+export function verifyToken(req, res, next){
+    const auth = req.headers['authorization'];
+    const bearer = bearerHeader.split(' ');
+    const bearerToken = bearer[1];
+    if(jwt.verify(bearerToken)){
+        next();
+    }
+    else{
+        res.status(401).send("Invalid token!");
+    }
+
 }

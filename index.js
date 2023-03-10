@@ -1,5 +1,5 @@
 import {validateRequest, createRecordFilter, createFilter, createNewsListFilter, createNewsFilter} from "./middleware/middlewares.js";
-import {getRecordPipelineResult, getCountPipelineResult, getNewsList, getNews} from "./controller/controllers.js";
+import {getRecordPipelineResult, getCountPipelineResult, getNewsList, getNews, getDiscordToken} from "./controller/controllers.js";
 import express from "express";
 import * as swaggerUi from 'swagger-ui-express';
 import swaggerDocs from './swagger.json' assert {type: 'json'};
@@ -150,6 +150,7 @@ app.get('/news', createNewsListFilter, getNewsList);
 */
 app.get('/news/:_id', createNewsFilter, getNews);
 
+app.post('/login', getDiscordToken);
 app.listen(28001, '0.0.0.0',()=> {
   console.log("done!");
 })

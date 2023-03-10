@@ -1,4 +1,7 @@
 import {winner, news} from "../utils/database.js";
+import fetch from 'node-fetch';
+import {redirect_uri, guild_id, acceptable_roles} from '../config.js';
+import jwt from 'jsonwebtoken';
 
 function createCountPipeline(filters, limit, offset){
     return [
@@ -138,4 +141,90 @@ export async function getNewsList(req, res){
 export async function getNews(req, res){
   const data = await news.findOne(res.locals.filters);
   res.send(data);
+}
+
+async function fetchAccessToken(code){
+  try{
+      const res = await fetch("https://discord.com/api/oauth2/token",{
+          method: "POST",
+          headers: {
+              "Content-Type": "application/x-www-form-urlencoded"
+          },
+          body: `client_id=${process.env.client_id}&client_secret=${process.env.client_secret}&grant_type=authorization_code&scope=identify%20guilds&redirect_uri=${redirect_uri}&code=${code}`
+      })
+      if(res.status === 400){ 
+          return {
+            token: null,
+            response: 400,
+            reason: "Invalid code"
+          };
+      }
+      if(!res.ok){
+          return {
+            token: null,
+            response: 500,
+            reason: "Discord API error"
+          }
+      }
+      const data = await res.json();
+      return {token: data.access_token};
+  }
+  catch(error){
+    console.error(error);
+      return {
+        token: null,
+        response: 500,
+        reason: "Discord API error"
+      }
+  }
+}
+
+async function fetchRoleInServer(token){
+  try{
+    const res = await fetch(`https://discord.com/api/users/@me/guilds/${guild_id}/member`,{
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    })
+    if(!res.ok) throw new Error();
+    const data = await res.json();
+    return { 
+      roles: data.roles,
+      user: {
+        username: `${data.user.username}#${data.user.discriminator}`,
+        userID: data.user.id,
+        avatar: `https://cdn.discordapp.com/avatars/${data.user.id}/${data.user.avatar}.png`
+      },
+
+    }
+  }
+  catch(error){
+    return {
+      response: 500,
+      reason: "Discord API error"
+    }
+  }
+}
+export async function getDiscordToken(req, res){
+  const accessResponse = await fetchAccessToken(req.body.code);
+  if(!accessResponse.token){
+    res.status(accessResponse.response).send(accessResponse.reason);
+    return;
+  }
+  const token = accessResponse.token;
+  const rolesResponse = await fetchRoleInServer(token);
+  if(!rolesResponse.roles){
+    res.status(rolesResponse.response).send(rolesResponse.reason);
+    return;
+  }
+  if(rolesResponse.roles.filter(role => acceptable_roles.includes(role)).length === 0){
+    res.status(401).send("You are not authorised!");
+    return;
+  }
+  res.status(200).send({
+    user: rolesResponse.user,
+    token: jwt.sign(rolesResponse.user, process.env.private_key)
+  });
 }
