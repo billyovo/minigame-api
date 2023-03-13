@@ -159,13 +159,7 @@ async function fetchAccessToken(code){
             reason: "Invalid code"
           };
       }
-      if(!res.ok){
-          return {
-            token: null,
-            response: 500,
-            reason: "Discord API error"
-          }
-      }
+      if(!res.ok) throw new Error();
       const data = await res.json();
       return {token: data.access_token};
   }
@@ -227,4 +221,33 @@ export async function getDiscordToken(req, res){
     user: rolesResponse.user,
     token: jwt.sign(rolesResponse.user, process.env.private_key)
   });
+}
+
+export async function deleteNews(req, res){
+  const data = await news.deleteOne(req.params._id);
+  res.status(200).send(data);
+}
+
+
+function isValidNews(body){
+  const checkKeys = ["title", "content", "images","publish_date"];
+  return Object.keys(body).every(key => checkKeys.includes(key))
+}
+export async function updateNews(req, res){
+  if(isValidNews(req.body)){
+    res.status(400).send("Invalid Body");
+    return;
+  }
+
+  const data = await news.updateOne({_id: req.params._id}, {$set: req.body});
+  res.status(200).send(data);
+}
+
+export async function addNews(req, res){
+  if(isValidNews(req.body)){
+    res.status(400).send("Invalid Body");
+    return;
+  }
+  const data = await news.insertOne(req.body);
+  res.status(200).send(data);
 }

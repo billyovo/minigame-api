@@ -6,19 +6,48 @@ import jwt from 'jsonwebtoken';
     validate if request is valid
     1. less than 100 records
     2. more than 0 records
+    3. valid objectID for before, after or _id
+    4. valid event name
+    5. valid player name
 
     @typedef {object} showRequestQuery
     @property {number} limit - number of records to show
 */
 export function validateRequest(req, res, done){
-  if(req.query.limit && req.query.limit >100){
-   	res.status(403).send("Request too large!")
-    return;
-   }
-  if(req.query.limit && req.query.limit <= 0){
-   	res.status(403).send("Request too small!")
-    return;
-  }
+    if(req.query.limit && req.query.limit >100){
+     	res.status(403).send("Request too large!")
+      return;
+     }
+    if(req.query.limit && req.query.limit <= 0){
+     	res.status(403).send("Request too small!")
+      return;
+    }
+    const objectIDRegex = /^[a-f\d]{24}$/i;
+    if(req.params.event && !getEventName(req.params.event)){
+        res.status(400).send("Invalid Event!")
+        return;
+    }
+
+    if(req.query.before && !req.query.before.match(objectIDRegex)){
+        res.status(400).send("Invalid Before ID!")
+        return; 
+    }
+    if(req.query.after && !req.query.after.match(objectIDRegex)){
+        res.status(400).send("Invalid After ID!")
+        return;
+    } 
+
+    if(req.params._id && !req.params._id.match(objectIDRegex)){
+        res.status(400).send("Invalid ID!")
+        return;
+    }
+
+    const playerNameRegex = /^[a-zA-Z0-9_]{2,16}$/;
+    if(req.params.player && !req.params.player.match(playerNameRegex)){
+        res.status(400).send("Invalid Player Name!")
+        return;
+    }
+
     done();
 }
 /*
@@ -111,9 +140,6 @@ export function createFilter(req, res, next){
     @property {string} before - get records before this id
     @property {string} after - get records after this id
     @property {number} limit - number of records to show
-
-    @typedef {object} newsRequestParams
-    @property {string} _id - get records from this id
 
     @typedef {object} newsResponse
     @property {number} total - total number of news

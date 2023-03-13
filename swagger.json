@@ -5,7 +5,7 @@
     "title": "REST API",
     "description": ""
   },
-  "host": "https://minigame-api.letsdream.today",
+  "host": "minigame-api.letsdream.today",
   "basePath": "/",
   "schemes": [
     "https"

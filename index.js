@@ -1,8 +1,6 @@
-import {validateRequest, createRecordFilter, createFilter, createNewsListFilter, createNewsFilter} from "./middleware/middlewares.js";
-import {getRecordPipelineResult, getCountPipelineResult, getNewsList, getNews, getDiscordToken} from "./controller/controllers.js";
+import {validateRequest, createRecordFilter, createFilter, createNewsListFilter, createNewsFilter, verifyToken} from "./middleware/middlewares.js";
+import {getRecordPipelineResult, getCountPipelineResult, getNewsList, getNews, getDiscordToken, deleteNews, updateNews, addNews} from "./controller/controllers.js";
 import express from "express";
-import * as swaggerUi from 'swagger-ui-express';
-import swaggerDocs from './swagger.json' assert {type: 'json'};
 const app = express();
 app.use(express.json());
 
@@ -22,7 +20,6 @@ import helmet from "helmet";
 app.use(helmet());
 
 app.all('*', validateRequest);
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 /*
 	@openapi
 	components:
@@ -149,6 +146,37 @@ app.get('/news', createNewsListFilter, getNewsList);
 						description: image url
 */
 app.get('/news/:_id', createNewsFilter, getNews);
+
+app.delete("/news/:_id", verifyToken, deleteNews);
+
+/*
+	@openapi
+	components:
+	  schemas:
+	    News:
+			type: object
+			properties:
+				_id:
+					type: string
+					description: id of the news
+				title:
+					type: string
+					description: title of the news
+				content:
+					type: string
+					description: content of the news in html
+				publish_date:
+					type: string
+					description: publish date of the news
+				image:
+					type: array
+					description: images of the news
+					items:
+						type: string
+						description: image url
+*/
+app.patch("/news/:_id", verifyToken, updateNews);
+app.post("/news", verifyToken, addNews);
 
 app.post('/login', getDiscordToken);
 app.listen(28001, '0.0.0.0',()=> {
