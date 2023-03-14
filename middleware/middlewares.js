@@ -199,8 +199,8 @@ export function createNewsFilter(req, res, next){
 }
 
 export function verifyToken(req, res, next){
-    const auth = req.headers['authorization'];
-    const bearer = bearerHeader.split(' ');
+    const auth = req.headers['Authorization'];
+    const bearer = auth.split(' ');
     const bearerToken = bearer[1];
     if(jwt.verify(bearerToken)){
         next();
