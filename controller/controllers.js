@@ -2,6 +2,7 @@ import {winner, news} from "../utils/database.js";
 import fetch from 'node-fetch';
 import {redirect_uri, guild_id, acceptable_roles} from '../config.js';
 import jwt from 'jsonwebtoken';
+import {ObjectId} from "mongodb";
 
 function createCountPipeline(filters, limit, offset){
     return [
@@ -224,7 +225,7 @@ export async function getDiscordToken(req, res){
 }
 
 export async function deleteNews(req, res){
-  const data = await news.deleteOne({_id: req.params._id});
+  const data = await news.deleteOne({_id: new ObjectId(req.params._id)});
   res.status(200).send(data);
 }
 
@@ -239,7 +240,7 @@ export async function updateNews(req, res){
     return;
   }
 
-  const data = await news.updateOne({_id: req.params._id}, {$set: req.body});
+  const data = await news.updateOne({_id: new ObjectId(req.params._id)}, {$set: req.body});
   res.status(200).send(data);
 }
 
