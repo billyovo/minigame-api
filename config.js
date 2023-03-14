@@ -1,5 +1,0 @@
-export const redirect_uri = "http://localhost:3000/edit";
-export const guild_id = "232865546868228106";
-export const acceptable_roles = [
-    "340028082041913344", "339297601935376385", "868852207515213884", "658021077087158282", "449505818321223710", "626025251964321792"
-];
