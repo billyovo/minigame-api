@@ -1,0 +1,44 @@
+[
+    {
+      "title": "碰碰豬",
+      "id": "bumper",
+      "rrule": "FREQ=MONTHLY;BYDAY=2WE,4SA",
+      "imageurl":"assets/images/pig.svg",
+      "emote": ":pig:"
+    },
+    {
+      "title": "忘掉那 無形鎖",
+      "id": "cannon",        
+      "rrule": "FREQ=MONTHLY;BYDAY=1WE,3SA",
+      "imageurl":"assets/images/lock.svg",
+      "emote": ":lock:"
+    },
+    {
+      "title": "繽紛飛天蛇",
+      "id": "snake",        
+      "rrule": "FREQ=MONTHLY;BYDAY=3WE,1SA",
+      "imageurl":"assets/images/snake.svg",
+      "emote": ":snake:"
+    },
+    {
+      "title": "七彩羊駝保衛戰",
+      "id": "boat",        
+      "rrule": "FREQ=MONTHLY;BYDAY=4WE,2SA",
+      "imageurl":"assets/images/llama.svg",
+      "emote": ":llama:"
+    },
+    {
+      "title": "高空墜落",
+      "id": "drop",        
+      "rrule": "FREQ=MONTHLY;BYDAY=1MO,3FR",
+      "imageurl":"assets/images/drop.svg",
+      "emote": ":parachute:"
+    },
+    {
+      "title": "記憶極限",
+      "id": "match",        
+      "rrule": "FREQ=MONTHLY;BYDAY=2MO,4FR",
+      "imageurl":"assets/images/brain.svg",
+      "emote": ":brain:"
+    }
+]

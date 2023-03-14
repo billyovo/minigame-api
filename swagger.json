@@ -1,0 +1,354 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "REST API",
+    "description": ""
+  },
+  "host": "minigame-api.letsdream.today",
+  "basePath": "/",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/record/{server}": {
+      "get": {
+        "description": "Get records by server",
+        "tags": ["record"],
+        "parameters": [
+          {
+            "name": "server",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Can be survival, skyblock or all"
+          },
+          {
+            "name": "before",
+            "in": "query",
+            "type": "string",
+            "description": "Get records before this id"
+          },
+          {
+            "name": "after",
+            "in": "query",
+            "type": "string",
+            "description": "Get records after this id"
+          },
+          {
+            "name": "dateBefore",
+            "in": "query",
+            "type": "string",
+            "description": "Get records before this date with format yyyy-MM-dd"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "string",
+            "description": "Maximum number of record to return in one query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/record/{server}/{event}": {
+      "get": {
+        "description": "Get records by server & event",
+        "tags": ["record"],
+        "parameters": [
+          {
+            "name": "server",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Can be survival, skyblock or all"
+          },
+          {
+            "name": "event",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "event ID, can be found in /event"
+          },
+          {
+            "name": "before",
+            "in": "query",
+            "type": "string",
+            "description": "Get records before this id"
+          },
+          {
+            "name": "after",
+            "in": "query",
+            "type": "string",
+            "description": "Get records after this id"
+          },
+          {
+            "name": "dateBefore",
+            "in": "query",
+            "type": "string",
+            "description": "Get records before this date with format yyyy-MM-dd"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "string",
+            "description": "Maximum number of record to return in one query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/record/{server}/{event}/{player}": {
+      "get": {
+        "description": "Get records by server & event & player name",
+        "tags": ["record"],
+        "parameters": [
+          {
+            "name": "server",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Can be survival, skyblock or all"
+          },
+          {
+            "name": "event",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "event ID, can be found in /event"
+          },
+          {
+            "name": "player",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "player name, needs to be exact"
+          },
+          {
+            "name": "before",
+            "in": "query",
+            "type": "string",
+            "description": "Get records before this id"
+          },
+          {
+            "name": "after",
+            "in": "query",
+            "type": "string",
+            "description": "Get records after this id"
+          },
+          {
+            "name": "dateBefore",
+            "in": "query",
+            "type": "string",
+            "description": "Get records before this date with format yyyy-MM-dd"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "string",
+            "description": "Maximum number of record to return in one query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/count/{server}": {
+      "get": {
+        "description": "Count the number of time each players have won in a server",
+        "tags": ["count"],
+        "parameters": [
+          {
+            "name": "server",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Can be survival, skyblock or all"
+          },
+          {
+            "name": "dateBefore",
+            "in": "query",
+            "type": "string",
+            "description": "Get count before this date with format yyyy-MM-dd"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "string",
+            "description": "Maximum number of record to return in one query"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string",
+            "description": "Page number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/count/{server}/{event}": {
+      "get": {
+        "description": "Count the number of time each players have won in a server by event",
+        "tags": ["count"],
+        "parameters": [
+          {
+            "name": "server",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Can be survival, skyblock or all"
+          },
+          {
+            "name": "event",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "event ID, can be found in /event"
+          },
+          {
+            "name": "dateBefore",
+            "in": "query",
+            "type": "string",
+            "description": "Get count before this date with format yyyy-MM-dd"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "string",
+            "description": "Maximum number of record to return in one query"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string",
+            "description": "Page number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/count/{server}/{event}/{player}": {
+      "get": {
+        "description": "Count the number of time each players have won in a server by event & name",
+        "tags": ["count"],
+        "parameters": [
+          {
+            "name": "server",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Can be survival, skyblock or all"
+          },
+          {
+            "name": "event",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "event ID, can be found in /event"
+          },
+          {
+            "name": "player",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "player name, needs to be exact"
+          },
+          {
+            "name": "dateBefore",
+            "in": "query",
+            "type": "string",
+            "description": "Get count before this date with format yyyy-MM-dd"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "string",
+            "description": "Maximum number of record to return in one query"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string",
+            "description": "Page number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/news": {
+      "get": {
+        "description": "Get list of news",
+        "tags": ["news"],
+        "parameters": [
+          {
+            "name": "before",
+            "in": "query",
+            "type": "string",
+            "description": "Get news before this id"
+          },
+          {
+            "name": "after",
+            "in": "query",
+            "type": "string",
+            "description": "Get news after this id"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "string",
+            "description": "Maximum number of news to return in one query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/news/{_id}": {
+      "get": {
+        "description": "Get news by ID",
+        "tags": ["news"],
+        "parameters": [
+          {
+            "name": "_id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "news ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  }
+}
