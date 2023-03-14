@@ -199,16 +199,18 @@ export function createNewsFilter(req, res, next){
 }
 
 export function verifyToken(req, res, next){
-    const auth = req.headers.authorization;
-    const bearer = auth?.split(' ');
-    if(!auth || bearer?.length !== 2) res.status(401).send("Invalid token!");
-    const bearerToken = bearer[1];
+    try{
+        const auth = req.headers.authorization;
+        const bearer = auth?.split(' ');
+        if(!auth || bearer?.length !== 2) throw new Error();
+        const bearerToken = bearer[1];
 
-    if(jwt.verify(bearerToken, process.env.private_key)){
-        next();
+        if(jwt.verify(bearerToken, process.env.private_key)){
+            next();
+        }
     }
-    else{
+    catch(error){
         res.status(401).send("Invalid token!");
     }
-
+    
 }
