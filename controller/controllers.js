@@ -224,7 +224,7 @@ export async function getDiscordToken(req, res){
 }
 
 export async function deleteNews(req, res){
-  const data = await news.deleteOne(req.params._id);
+  const data = await news.deleteOne({_id: req.params._id});
   res.status(200).send(data);
 }
 
