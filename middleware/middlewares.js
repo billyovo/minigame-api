@@ -15,6 +15,7 @@ import { isValidObjectID, isValidMinecraftPlayerName } from "../utils/validators
 */
 
 export function validateRequest(req, res, done){
+    
     if(req.params._id && !isValidObjectID(req.params._id)){
         res.status(400).send("Invalid Object ID!");
         return;

@@ -1,6 +1,9 @@
 export function isValidNews(body){
-    const checkKeys = ["title", "content", "images","publish_date"];
-    return Object.keys(body).every(key => checkKeys.includes(key))
+    return typeof(body.title) === 'string' &&
+           typeof(body.content) === 'string' &&
+           Array.isArray(body.images) &&
+           typeof(body.publish_date) === 'string' &&
+           Object.keys(body).length === 4;
 }
 
 export function isValidObjectID(id){

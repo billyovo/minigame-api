@@ -146,7 +146,7 @@ app.get('/news', createNewsListFilter, getNewsList);
 						type: string
 						description: image url
 */
-app.get('/news/:_id', createNewsFilter, getNews);
+app.get('/news/:_id', [validateRequest, createNewsFilter], getNews);
 
 app.delete("/news/:_id", verifyToken, deleteNews);
 
