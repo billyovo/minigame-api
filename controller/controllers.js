@@ -3,8 +3,7 @@ import fetch from 'node-fetch';
 import {redirect_uri, guild_id, acceptable_roles} from '../config.js';
 import jwt from 'jsonwebtoken';
 import {ObjectId} from "mongodb";
-import path from 'path'; 
-import assert from "assert";
+import { isValidNews, isValidObjectID } from "../utils/validators.js";
 
 function createCountPipeline(filters, limit, offset){
     return [
@@ -150,6 +149,7 @@ export async function getNewsList(req, res){
 
 export async function getNews(req, res){
   const data = await news.findOne(res.locals.filters);
+  if(!data) res.status(404).send();
   res.send(data);
 }
 
@@ -241,10 +241,6 @@ export async function deleteNews(req, res){
 }
 
 
-function isValidNews(body){
-  const checkKeys = ["title", "content", "images","publish_date"];
-  return Object.keys(body).every(key => checkKeys.includes(key))
-}
 export async function updateNews(req, res){
   if(isValidNews(req.body)){
     res.status(400).send("Invalid Body");

@@ -1,7 +1,7 @@
 import {getEventName, getServerName} from "../utils/namingUtils.js";
 import {ObjectId} from "mongodb";
 import jwt from 'jsonwebtoken';
-
+import { isValidObjectID, isValidMinecraftPlayerName } from "../utils/validators.js";
 /*
     validate if request is valid
     1. less than 100 records
@@ -13,7 +13,11 @@ import jwt from 'jsonwebtoken';
     @typedef {object} showRequestQuery
     @property {number} limit - number of records to show
 */
+
 export function validateRequest(req, res, done){
+    if(req.params._id && !isValidObjectID(req.params._id)){
+        res.status(400).send("Invalid Object ID!");
+    }
     if(req.query.limit && req.query.limit >100){
      	res.status(403).send("Request too large!")
       return;
@@ -22,28 +26,26 @@ export function validateRequest(req, res, done){
      	res.status(403).send("Request too small!")
       return;
     }
-    const objectIDRegex = /^[a-f\d]{24}$/i;
     if(req.params.event && !getEventName(req.params.event)){
         res.status(400).send("Invalid Event!")
         return;
     }
 
-    if(req.query.before && !req.query.before.match(objectIDRegex)){
+    if(req.query.before && !isValidObjectID(req.query.before)){
         res.status(400).send("Invalid Before ID!")
         return; 
     }
-    if(req.query.after && !req.query.after.match(objectIDRegex)){
+    if(req.query.after && !isValidObjectID(req.query.after)){
         res.status(400).send("Invalid After ID!")
         return;
     } 
 
-    if(req.params._id && !req.params._id.match(objectIDRegex)){
+    if(req.params._id && !isValidObjectID(req.params._id)){
         res.status(400).send("Invalid ID!")
         return;
     }
 
-    const playerNameRegex = /^[a-zA-Z0-9_]{2,16}$/;
-    if(req.params.player && !req.params.player.match(playerNameRegex)){
+    if(req.params.player && !isValidMinecraftPlayerName(req.params.player)){
         res.status(400).send("Invalid Player Name!")
         return;
     }

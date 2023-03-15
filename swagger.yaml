@@ -513,6 +513,9 @@ paths:
                         title:
                           type: string
                           example: I am news title
+                        publish_date:
+                          type: string
+                          example: 2023-03-15
         403:
           description: Limit is too big or too small. Must be ranging from 1-100
         404:

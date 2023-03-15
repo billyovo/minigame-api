@@ -2,6 +2,9 @@
   "name": "Minigame Record & News API",
   "version": "1.0.0",
   "author": "deadfish12",
+  "scripts": {
+    "gen-doc": "npx @redocly/cli build-docs ./swagger.yaml" 
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
