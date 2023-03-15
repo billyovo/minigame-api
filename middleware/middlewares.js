@@ -17,14 +17,15 @@ import { isValidObjectID, isValidMinecraftPlayerName } from "../utils/validators
 export function validateRequest(req, res, done){
     if(req.params._id && !isValidObjectID(req.params._id)){
         res.status(400).send("Invalid Object ID!");
+        return;
     }
     if(req.query.limit && req.query.limit >100){
      	res.status(403).send("Request too large!")
-      return;
+         return;
      }
     if(req.query.limit && req.query.limit <= 0){
      	res.status(403).send("Request too small!")
-      return;
+        return;
     }
     if(req.params.event && !getEventName(req.params.event)){
         res.status(400).send("Invalid Event!")
