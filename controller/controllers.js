@@ -3,6 +3,8 @@ import fetch from 'node-fetch';
 import {redirect_uri, guild_id, acceptable_roles} from '../config.js';
 import jwt from 'jsonwebtoken';
 import {ObjectId} from "mongodb";
+import path from 'path'; 
+import assert from "assert";
 
 function createCountPipeline(filters, limit, offset){
     return [
@@ -107,7 +109,12 @@ function createNewsListPipeline(filters, limit){
         ], 
         'rows': [
           {
-            '$limit': limit
+            '$limit': limit,
+            '$project': {
+              '_id': 1, 
+              'title': 1,
+              'publish_date': 1
+            }
           }
         ]
       }
@@ -220,7 +227,9 @@ export async function getDiscordToken(req, res){
   }
   res.status(200).send({
     user: rolesResponse.user,
-    token: jwt.sign(rolesResponse.user, process.env.private_key)
+    token: jwt.sign(
+      {data: rolesResponse.user, exp: Math.floor(Date.now() / 1000) + (60 * 60 * 2), }, 
+      process.env.private_key)
   });
 }
 
@@ -251,4 +260,9 @@ export async function addNews(req, res){
   }
   const data = await news.insertOne(req.body);
   res.status(200).send(data);
+}
+
+export async function sendEvents(req, res){
+  const event = await import("../assets/event.json", {assert: { type: "json" }});
+  res.send(event.default);
 }

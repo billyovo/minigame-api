@@ -1,5 +1,5 @@
 import {validateRequest, createRecordFilter, createFilter, createNewsListFilter, createNewsFilter, verifyToken} from "./middleware/middlewares.js";
-import {getRecordPipelineResult, getCountPipelineResult, getNewsList, getNews, getDiscordToken, deleteNews, updateNews, addNews} from "./controller/controllers.js";
+import {getRecordPipelineResult, getCountPipelineResult, getNewsList, getNews, getDiscordToken, deleteNews, updateNews, addNews, sendEvents} from "./controller/controllers.js";
 import express from "express";
 const app = express();
 app.use(express.json());
@@ -46,6 +46,7 @@ app.all('*', validateRequest);
 					type: string
 					description: date of the record
 */
+app.get('/events', sendEvents);
 app.get('/record/:server', createRecordFilter, getRecordPipelineResult);
 app.get('/record/:server/:event', createRecordFilter, getRecordPipelineResult);
 app.get('/record/:server/:event/:player', createRecordFilter, getRecordPipelineResult);
@@ -178,7 +179,12 @@ app.delete("/news/:_id", verifyToken, deleteNews);
 app.patch("/news/:_id", verifyToken, updateNews);
 app.post("/news", verifyToken, addNews);
 
-app.post('/login', getDiscordToken);
+const apiLimiter = rateLimit({
+	windowMs: 60 * 60 * 1000, 
+	max: 2
+})
+
+app.post('/login', apiLimiter, getDiscordToken);
 app.listen(28001, '0.0.0.0',()=> {
   console.log("done!");
 })
