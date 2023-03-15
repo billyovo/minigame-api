@@ -110,6 +110,8 @@ function createNewsListPipeline(filters, limit){
         'rows': [
           {
             '$limit': limit,
+          },
+          {
             '$project': {
               '_id': 1, 
               'title': 1,
