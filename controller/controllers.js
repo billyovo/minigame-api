@@ -149,7 +149,10 @@ export async function getNewsList(req, res){
 
 export async function getNews(req, res){
   const data = await news.findOne(res.locals.filters);
-  if(!data) res.status(404).send();
+  if(!data){ 
+    res.status(404).send();
+    return;
+  }
   res.send(data);
 }
 
