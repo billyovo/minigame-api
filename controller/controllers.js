@@ -299,8 +299,8 @@ function getBanlistPipeline(server){
 ]
 }
 export async function getBanList(req, res){
-    const survivalResult = await database.aggregate(getBanlistPipeline("生存")).toArray();
-    const skyblockResult = await database.aggregate(getBanlistPipeline("空島")).toArray();
+    const survivalResult = await winner.aggregate(getBanlistPipeline("生存")).toArray();
+    const skyblockResult = await winner.aggregate(getBanlistPipeline("空島")).toArray();
     
     let result = {survival: {}, skyblock: {}};
     for(let i = 0; i < survivalResult.length; i++){
