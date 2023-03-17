@@ -3,10 +3,11 @@ const eventMapping = new Map();
 
 events.forEach((event)=>{
     eventMapping.set(event.id,event.title);
+    eventMapping.set(event.title, event.id);
 })
 
-export function getEventName(eventID){
-  return eventMapping.get(eventID);
+export function getEventNameOrID(event){
+  return eventMapping.get(event);
  }
 
 export function getServerName(name){

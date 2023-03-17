@@ -1,4 +1,4 @@
-import {getEventName, getServerName} from "../utils/namingUtils.js";
+import {getEventNameOrID, getServerName} from "../utils/namingUtils.js";
 import {ObjectId} from "mongodb";
 import jwt from 'jsonwebtoken';
 import { isValidObjectID, isValidMinecraftPlayerName } from "../utils/validators.js";
@@ -28,7 +28,7 @@ export function validateRequest(req, res, done){
      	res.status(403).send("Request too small!")
         return;
     }
-    if(req.params.event && !getEventName(req.params.event)){
+    if(req.params.event && !getEventNameOrID(req.params.event)){
         res.status(400).send("Invalid Event!")
         return;
     }
@@ -92,7 +92,7 @@ export function createRecordFilter(req, res, next){
     const serverName = getServerName(req.params.server);
     if(serverName !== "all") filters.server = serverName;
     
-    const eventName = getEventName(req.params.event);
+    const eventName = getEventNameOrID(req.params.event);
     if(eventName) filters.event = eventName;
     if(req.query.dateBefore) filters.date = {"$lte": req.query.dateBefore};
     if(req.params.player) filters.name = req.params.player;
@@ -126,7 +126,7 @@ export function createFilter(req, res, next){
     const serverName = getServerName(req.params.server);
     if(serverName !== "all") filters.server = serverName;
     
-    const eventName = getEventName(req.params.event);
+    const eventName = getEventNameOrID(req.params.event);
     if(eventName) filters.event = eventName;
     
     if(req.params.player) filters.name = req.params.player;

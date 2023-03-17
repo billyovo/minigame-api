@@ -1,5 +1,5 @@
 import {validateRequest, createRecordFilter, createFilter, createNewsListFilter, createNewsFilter, verifyToken} from "./middleware/middlewares.js";
-import {getRecordPipelineResult, getCountPipelineResult, getNewsList, getNews, getDiscordToken, deleteNews, updateNews, addNews, sendEvents} from "./controller/controllers.js";
+import {getRecordPipelineResult, getCountPipelineResult, getNewsList, getNews, getDiscordToken, deleteNews, updateNews, addNews, sendEvents, getBanList} from "./controller/controllers.js";
 import express from "express";
 const app = express();
 app.use(express.json());
@@ -47,6 +47,7 @@ app.all('*', validateRequest);
 					description: date of the record
 */
 app.get('/events', sendEvents);
+app.get('/banlist', getBanList);
 app.get('/record/:server', createRecordFilter, getRecordPipelineResult);
 app.get('/record/:server/:event', createRecordFilter, getRecordPipelineResult);
 app.get('/record/:server/:event/:player', createRecordFilter, getRecordPipelineResult);

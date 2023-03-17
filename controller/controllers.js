@@ -4,6 +4,7 @@ import {redirect_uri, guild_id, acceptable_roles} from '../config.js';
 import jwt from 'jsonwebtoken';
 import {ObjectId} from "mongodb";
 import { isValidNews, isValidObjectID } from "../utils/validators.js";
+import { getEventNameOrID } from "../utils/namingUtils.js";
 
 function createCountPipeline(filters, limit, offset){
     return [
@@ -266,4 +267,45 @@ export async function addNews(req, res){
 export async function sendEvents(req, res){
   const event = await import("../assets/event.json", {assert: { type: "json" }});
   res.send(event.default);
+}
+
+function getBanlistPipeline(server){
+  return [
+{
+  '$match': {
+    'server': server
+  }
+}, {
+  '$sort': {
+    'date': -1
+  }
+}, {
+  '$group': {
+    '_id': {
+      'event': '$event'
+    }, 
+    'name': {
+      '$first': '$name'
+    }
+  }
+}, {
+  '$project': {
+    'event': '$_id.event', 
+    'name': '$name'
+  }
+}, {
+  '$unset': '_id'
+}
+]
+}
+export async function getBanList(req, res){
+    const survivalResult = await database.aggregate(getBanlistPipeline("生存")).toArray();
+    const skyblockResult = await database.aggregate(getBanlistPipeline("空島")).toArray();
+    
+    let result = {survival: {}, skyblock: {}};
+    for(let i = 0; i < survivalResult.length; i++){
+        result.survival[getEventNameOrID(survivalResult[i].event)] = survivalResult[i].name;
+        result.skyblock[getEventNameOrID(skyblockResult[i].event)] = skyblockResult[i].name;
+    }
+    res.status(200).send(result);
 }
