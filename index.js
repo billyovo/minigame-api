@@ -1,4 +1,4 @@
-import {validateRequest, createRecordFilter, createFilter, createNewsListFilter, createNewsFilter, verifyToken} from "./middleware/middlewares.js";
+import {validateRequest, createRecordFilter, createFilter, createNewsListFilter, createNewsFilter, verifyToken, createNewsListFilterUnrestricted} from "./middleware/middlewares.js";
 import {getRecordPipelineResult, getCountPipelineResult, getNewsList, getNews, getDiscordToken, deleteNews, updateNews, addNews, sendEvents, getBanList} from "./controller/controllers.js";
 import express from "express";
 const app = express();
@@ -147,6 +147,7 @@ app.get('/news', createNewsListFilter, getNewsList);
 						type: string
 						description: image url
 */
+app.get('/news-edit', [verifyToken, createNewsListFilterUnrestricted], getNewsList);
 app.get('/news/:_id', [validateRequest, createNewsFilter], getNews);
 
 app.delete("/news/:_id", verifyToken, deleteNews);

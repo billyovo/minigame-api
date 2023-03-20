@@ -155,6 +155,23 @@ export function createFilter(req, res, next){
     @property {string[]} rows.image - image of the news
 
 */
+export function createNewsListFilterUnrestricted(req,res,next){
+    let filters = {};
+    if(req.query.before){
+        filters._id = {
+            "$lt": new ObjectId(req.query.before)
+        }
+    }
+    if(req.query.after){
+        filters._id = {
+            "$gt": new ObjectId(req.query.after)
+        }
+    }
+    
+    res.locals.filters = filters;
+    res.locals.limit = parseInt(req.query.limit) || 50;
+    next();   
+}
 
 export function createNewsListFilter(req,res,next){
     let filters = {
