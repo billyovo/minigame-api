@@ -1,6 +1,0 @@
-DELIMITER //
-DROP PROCEDURE IF EXISTS delete_news;
-CREATE PROCEDURE `delete_news`(_id INTEGER)
-BEGIN
-  DELETE FROM news WHERE ID = _id;
-END //
