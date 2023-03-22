@@ -213,6 +213,7 @@ paths:
         schema:
           type: string
           enum:
+            - all
             - bumper
             - cannon
             - snake
@@ -281,6 +282,7 @@ paths:
         schema:
           type: string
           enum:
+            - all
             - bumper
             - cannon
             - snake
@@ -400,6 +402,7 @@ paths:
         schema:
           type: string
           enum:
+            - all
             - bumper
             - cannon
             - snake
@@ -459,6 +462,7 @@ paths:
         schema:
           type: string
           enum:
+            - all
             - bumper
             - cannon
             - snake
