@@ -112,6 +112,11 @@ function createNewsListPipeline(filters, limit){
             '$limit': limit,
           },
           {
+            '$sort': {
+              'publish_date': -1
+            }
+          },
+          {
             '$project': {
               '_id': 1, 
               'title': 1,
