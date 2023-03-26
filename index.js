@@ -1,6 +1,8 @@
 import {validateRequest, createRecordFilter, createFilter, createNewsListFilter, createNewsFilter, verifyToken, createNewsListFilterUnrestricted} from "./middleware/middlewares.js";
-import {getRecordPipelineResult, getCountPipelineResult, getNewsList, getNews, getDiscordToken, deleteNews, updateNews, addNews, sendEvents, getBanList} from "./controller/controllers.js";
+import {getNextEventImage, getRecordPipelineResult, getCountPipelineResult, getNewsList, getNews, getDiscordToken, deleteNews, updateNews, addNews, sendEvents, getBanList, getEventSchedule} from "./controller/controllers.js";
 import express from "express";
+import "./cronJobs/jobs.js";
+
 const app = express();
 app.use(express.json());
 
@@ -119,6 +121,8 @@ app.get('/count/:server/:event/:player', createFilter, getCountPipelineResult);
 									description: image url
 
 */
+app.get('/schedule', getEventSchedule);
+app.get('/banner', getNextEventImage);
 app.get('/news', createNewsListFilter, getNewsList);
 
 /*

@@ -5,6 +5,8 @@ import jwt from 'jsonwebtoken';
 import {ObjectId} from "mongodb";
 import { isValidNews, isValidObjectID } from "../utils/validators.js";
 import { getEventNameOrID } from "../utils/namingUtils.js";
+import {eventsDateMap} from '../utils/getEventSchedule.js'
+import { resolve } from 'path';
 
 function createCountPipeline(filters, limit, offset){
     return [
@@ -313,4 +315,12 @@ export async function getBanList(req, res){
         result.skyblock[getEventNameOrID(skyblockResult[i].event)] = skyblockResult[i].name;
     }
     res.status(200).send(result);
+}
+
+export function getEventSchedule(req, res){
+  res.status(200).send(eventsDateMap);
+}
+
+export function getNextEventImage(req, res){
+    res.sendFile(resolve(eventsDateMap.nearest.imageurl));
 }

@@ -2,25 +2,31 @@ lockfileVersion: 5.4
 
 specifiers:
   cors: ^2.8.5
+  cron: ^2.3.0
   dotenv: ^16.0.3
   express: ^4.18.2
   express-rate-limit: ^6.7.0
   helmet: ^6.0.1
   jsonwebtoken: ^9.0.0
+  luxon: ^3.3.0
   mongodb: ^5.0.0
   node-fetch: ^3.3.0
+  rrule: ^2.7.2
   swagger-autogen: ^2.23.1
   swagger-ui-express: ^4.6.2
 
 dependencies:
   cors: 2.8.5
+  cron: 2.3.0
   dotenv: 16.0.3
   express: 4.18.2
   express-rate-limit: 6.7.0_express@4.18.2
   helmet: 6.0.1
   jsonwebtoken: 9.0.0
+  luxon: 3.3.0
   mongodb: 5.1.0
   node-fetch: 3.3.0
+  rrule: 2.7.2
   swagger-autogen: 2.23.1
   swagger-ui-express: 4.6.2_express@4.18.2
 
@@ -142,6 +148,12 @@ packages:
     dependencies:
       object-assign: 4.1.1
       vary: 1.1.2
+    dev: false
+
+  /cron/2.3.0:
+    resolution: {integrity: sha512-ZN5HP8zDY41sJolMsbc+GksRATcbvkPKF5wR/qc8FrV4NBVi9ORQa1HmYa5GydaysUB80X9XpRlRkooa5uEtTA==}
+    dependencies:
+      luxon: 3.3.0
     dev: false
 
   /data-uri-to-buffer/4.0.1:
@@ -416,6 +428,11 @@ packages:
       yallist: 4.0.0
     dev: false
 
+  /luxon/3.3.0:
+    resolution: {integrity: sha512-An0UCfG/rSiqtAIiBPO0Y9/zAnHUZxAMiCpTd5h2smgsj7GGmcenvrvww2cqNA8/4A5ZrD1gJpHN2mIHZQF+Mg==}
+    engines: {node: '>=12'}
+    dev: false
+
   /media-typer/0.3.0:
     resolution: {integrity: sha512-dq+qelQ9akHpcOl/gUVRTxVIOkAJ1wR3QAvb4RsVjS8oVoFjDGTc679wJYmUmknUF5HwMLOgb5O+a3KxfWapPQ==}
     engines: {node: '>= 0.6'}
@@ -586,6 +603,12 @@ packages:
       unpipe: 1.0.0
     dev: false
 
+  /rrule/2.7.2:
+    resolution: {integrity: sha512-NkBsEEB6FIZOZ3T8frvEBOB243dm46SPufpDckY/Ap/YH24V1zLeMmDY8OA10lk452NdrF621+ynDThE7FQU2A==}
+    dependencies:
+      tslib: 2.5.0
+    dev: false
+
   /safe-buffer/5.2.1:
     resolution: {integrity: sha512-rp3So07KcdmmKbGvgaNxQSJr7bGVSVk5S9Eq1F+ppbRo70+YeaDxkw5Dd8NPN+GD6bjnYm2VuPuCXmpuYvmCXQ==}
     dev: false
@@ -714,6 +737,10 @@ packages:
     engines: {node: '>=12'}
     dependencies:
       punycode: 2.3.0
+    dev: false
+
+  /tslib/2.5.0:
+    resolution: {integrity: sha512-336iVw3rtn2BUK7ORdIAHTyxHGRIHVReokCR3XjbckJMK7ms8FysBfhLR8IXnAgy7T0PTPNBWKiH514FOW/WSg==}
     dev: false
 
   /type-is/1.6.18:
