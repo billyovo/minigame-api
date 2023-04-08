@@ -1,0 +1,25 @@
+{
+  "name": "Minigame Record & News API",
+  "version": "1.0.0",
+  "author": "deadfish12",
+  "scripts": {
+    "gen-doc": "npx @redocly/cli build-docs ./swagger.yaml"
+  },
+  "dependencies": {
+    "canvas": "^2.11.2",
+    "cors": "^2.8.5",
+    "cron": "^2.3.0",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-rate-limit": "^6.7.0",
+    "helmet": "^6.0.1",
+    "jsonwebtoken": "^9.0.0",
+    "luxon": "^3.3.0",
+    "mongodb": "^5.0.0",
+    "node-fetch": "^3.3.0",
+    "rrule": "^2.7.2",
+    "swagger-autogen": "^2.23.1",
+    "swagger-ui-express": "^4.6.2"
+  },
+  "type": "module"
+}
