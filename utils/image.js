@@ -2,9 +2,9 @@ import path from 'path';
 import {createCanvas, loadImage, registerFont} from 'canvas';
 import fs from 'fs';
 export async function makeBanner(eventName, eventTime){
+    registerFont('./assets/font.ttf', {family: "gothicx"})
     const canvas = createCanvas(600,200);
     const ctx = canvas.getContext("2d");
-    registerFont('./assets/font.ttf', {family: "gothicx"})
     const base = await loadImage(path.resolve(".", "./assets/banner.png"));
     ctx.drawImage(base, 0,0);
 
