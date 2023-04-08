@@ -6,6 +6,7 @@
     "gen-doc": "npx @redocly/cli build-docs ./swagger.yaml"
   },
   "dependencies": {
+    "canvas": "^2.11.2",
     "cors": "^2.8.5",
     "cron": "^2.3.0",
     "dotenv": "^16.0.3",

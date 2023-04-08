@@ -7,6 +7,7 @@ import { isValidNews, isValidObjectID } from "../utils/validators.js";
 import { getEventNameOrID } from "../utils/namingUtils.js";
 import {eventsDateMap} from '../utils/getEventSchedule.js'
 import { resolve } from 'path';
+import { makeBanner } from "../utils/image.js";
 
 function createCountPipeline(filters, limit, offset){
     return [
@@ -322,5 +323,5 @@ export function getEventSchedule(req, res){
 }
 
 export function getNextEventImage(req, res){
-    res.sendFile(resolve(eventsDateMap.nearest.imageurl));
+    res.sendFile(resolve("./assets/banner-today.png"));
 }
