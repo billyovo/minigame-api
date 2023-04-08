@@ -323,5 +323,5 @@ export function getEventSchedule(req, res){
 }
 
 export function getNextEventImage(req, res){
-    res.sendFile(resolve("./assets/banner-today.png"));
+    res.sendFile(resolve(`./assets/banner-${eventsDateMap.nearest.date.toJSDate().toISOString().substring(0,10)}.png`));
 }

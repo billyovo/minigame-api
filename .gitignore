@@ -159,3 +159,4 @@ dist
 .pnp.*
 config.js
 assets/banner-today.png
+assets/banner-*.png
