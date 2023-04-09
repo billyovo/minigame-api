@@ -5,7 +5,7 @@ import "./cronJobs/jobs.js";
 import { makeBanner } from "./utils/image.js";
 import { eventsDateMap } from "./utils/getEventSchedule.js";
 
-await makeBanner(eventsDateMap.nearest.title, eventsDateMap.nearest.date.toJSDate().toISOString().substring(0,10))
+await makeBanner(eventsDateMap.nearest.title, eventsDateMap.nearest.date.toFormat('yyyy-MM-dd'))
 const app = express();
 app.use(express.json());
 
