@@ -323,5 +323,11 @@ export function getEventSchedule(req, res){
 }
 
 export function getNextEventImage(req, res){
+    res.set({
+      "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+      "Pragma": "no-cache",
+      "Expires": "0",
+      "Surrogate-Control": "no-store"
+    })    
     res.sendFile(resolve(`./assets/banner-${eventsDateMap.nearest.date.toFormat('yyyy-MM-dd')}.png`));
 }
