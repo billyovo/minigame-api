@@ -21,7 +21,7 @@ app.use(limiter)
 import cors from 'cors';
 app.use(cors());
 
-app.get('/banner', getNextEventImage);
+app.get('/banner-today.png', getNextEventImage);
 
 import helmet from "helmet";
 app.use(helmet());
