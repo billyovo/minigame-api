@@ -21,6 +21,8 @@ app.use(limiter)
 import cors from 'cors';
 app.use(cors());
 
+app.get('/banner', getNextEventImage);
+
 import helmet from "helmet";
 app.use(helmet());
 
@@ -125,7 +127,6 @@ app.get('/count/:server/:event/:player', createFilter, getCountPipelineResult);
 
 */
 app.get('/schedule', getEventSchedule);
-app.get('/banner', getNextEventImage);
 app.get('/news', createNewsListFilter, getNewsList);
 
 /*

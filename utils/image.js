@@ -17,5 +17,6 @@ export async function makeBanner(eventName, eventTime){
     ctx.textAlign = "left";
     ctx.fillText(eventTime, base.width-150, base.height-22)
     const buffer = canvas.toBuffer("image/png");
-    fs.writeFileSync(path.resolve(".", `./assets/banner-${eventTime}.png`), buffer);
+    fs.writeFileSync(path.resolve(".", `./assets/banner-today.png`), buffer);
+    console.log(`Banner updated ${eventTime + " " + eventName}`)
 }
