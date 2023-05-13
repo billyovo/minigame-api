@@ -329,5 +329,5 @@ export function getNextEventImage(req, res){
       "Expires": "0",
       "Surrogate-Control": "no-store"
     })    
-    res.sendFile(resolve(`./assets/banner-${eventsDateMap.nearest.date.toFormat('yyyy-MM-dd')}.png`));
+    res.sendFile(resolve(`./assets/banner-today.png`));
 }
