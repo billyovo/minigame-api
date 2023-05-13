@@ -1,6 +1,7 @@
 import {validateRequest, createRecordFilter, createFilter, createNewsListFilter, createNewsFilter, verifyToken, createNewsListFilterUnrestricted} from "./middleware/middlewares.js";
 import {getNextEventImage, getRecordPipelineResult, getCountPipelineResult, getNewsList, getNews, getDiscordToken, deleteNews, updateNews, addNews, sendEvents, getBanList, getEventSchedule} from "./controller/controllers.js";
 import express from "express";
+import morgan from 'morgan'
 import "./cronJobs/jobs.js";
 import { makeBanner } from "./utils/image.js";
 import { eventsDateMap } from "./utils/getEventSchedule.js";
@@ -8,7 +9,7 @@ import { eventsDateMap } from "./utils/getEventSchedule.js";
 await makeBanner(eventsDateMap.nearest.title, eventsDateMap.nearest.date.toFormat('yyyy-MM-dd'))
 const app = express();
 app.use(express.json());
-
+app.use(morgan('tiny'));
 import rateLimit from 'express-rate-limit';
 const limiter = rateLimit({
 	windowMs: 15 * 60 * 1000, 
