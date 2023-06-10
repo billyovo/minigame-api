@@ -4,7 +4,9 @@ import events from "../assets/event.json" assert {type: "json"};
 
 export let eventsDateMap = updateEvents();
 
-
+export function executeUpdateEvents(){
+    eventsDateMap = updateEvents();
+}
 
 export function updateEvents(){
     let eventsDateMap = {};
