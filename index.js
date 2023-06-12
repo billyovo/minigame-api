@@ -9,7 +9,7 @@ import { eventsDateMap } from "./utils/getEventSchedule.js";
 await makeBanner(eventsDateMap.nearest.title, eventsDateMap.nearest.date.toFormat('yyyy-MM-dd'))
 const app = express();
 app.use(express.json());
-app.use(morgan('tiny'));
+app.use(morgan(':date[clf] :method :url :status :response-time ms'));
 import rateLimit from 'express-rate-limit';
 const limiter = rateLimit({
 	windowMs: 15 * 60 * 1000, 
